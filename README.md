@@ -19,8 +19,7 @@ From your checkout directory:
 		
 2. Run the image 
 
-		docker run -it --rm \
-	   	 	-p 8443:443 \
+		docker run -it --rm -p 8443:443 \
 	    	-v ${cert_path}:/certs \
 	    	-v $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml \
 	    	-e KEYSTORE_PATH=/certs/keystore.jks \
@@ -33,8 +32,6 @@ From your checkout directory:
 
 	`-v ${cert_path}:/certs` 
 	maps the 'cert_path' location on the host system to the container as the source of the relevant keystores
-
-	`-it` Allocates a TTY and keeps STDIN open
 
 	`-v $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml` Maps an authorized-users.xml into the container over the default one provided
 
