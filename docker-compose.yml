@@ -8,5 +8,5 @@ nifi:
     - TRUSTSTORE_PASSWORD=${NIFI_PASS}
     - TRUSTSTORE_TYPE=JKS
   volumes:
-    - ${cert_path}:/certs
-    - $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml
+    - ${NIFI_CERT_PATH}:/certs
+    - authorized-users.xml:/nifi/conf/authorized-users.xml
