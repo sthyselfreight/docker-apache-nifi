@@ -1,0 +1,12 @@
+nifi:
+  image: sthysel/apache-nifi
+  environment:
+    - KEYSTORE_PATH=/certs/keystore.jks
+    - KEYSTORE_TYPE=JKS
+    - KEYSTORE_PASSWORD=${NIFI_PASS}
+    - TRUSTSTORE_PATH=/certs/truststore.jks
+    - TRUSTSTORE_PASSWORD=${NIFI_PASS}
+    - TRUSTSTORE_TYPE=JKS
+  volumes:
+    - ${cert_path}:/certs
+    - $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml
