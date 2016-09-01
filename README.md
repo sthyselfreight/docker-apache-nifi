@@ -1,10 +1,13 @@
 ![Apache NiFi logo](http://nifi.apache.org/images/niFi-logo-horizontal.png "Apache NiFi")
-# dockerfile-apache-nifi
+# docker-apache-nifi
 ## Version 1.0.0
 
 ### Apache NiFi Dockerfile
 
 Provides a Dockerfile and associated scripts for configuring an instance of [Apache NiFi](http://nifi.apache.org) to run with certificate authentication.  
+
+This version is directly derived from https://github.com/apiri/dockerfile-apache-nifi, the source container was changed to use openjdk:8 
+installation paths changed to personal preferance.
 
 ## Sample Usage
 
@@ -12,39 +15,30 @@ From your checkout directory:
 		
 1. Build the image
 
-        docker build -t apiri/apache-nifi .
+        docker build -t sthysel/apache-nifi .
 		
 2. Run the image 
 
-		docker run -i -t --rm \
+		docker run -it --rm \
 	   	 	-p 8443:443 \
-	    	-v ${cert_path}:/opt/certs \
-	    	-v $(readlink -f ./authorized-users.xml):/opt/nifi/conf/authorized-users.xml \
-	    	-e KEYSTORE_PATH=/opt/certs/keystore.jks \
+	    	-v ${cert_path}:/certs \
+	    	-v $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml \
+	    	-e KEYSTORE_PATH=/certs/keystore.jks \
 	    	-e KEYSTORE_TYPE=JKS \
 	    	-e KEYSTORE_PASSWORD=password \
-	    	-e TRUSTSTORE_PATH=/opt/certs/truststore.jks \
+	    	-e TRUSTSTORE_PATH=/certs/truststore.jks \
 	    	-e TRUSTSTORE_PASSWORD=password \
 	    	-e TRUSTSTORE_TYPE=JKS \
-	    	apiri/apache-nifi
+	    	sthysel/apache-nifi
 
-
-	`-p 8443:443`
-	exposes the UI at port 8443 on the Docker host system
-
-	`-v ${cert_path}:/opt/certs` 
+	`-v ${cert_path}:/certs` 
 	maps the 'cert_path' location on the host system to the container as the source of the relevant keystores
 
-	`-i -t` Allocates a TTY and keeps STDIN open
+	`-it` Allocates a TTY and keeps STDIN open
 
-	`-v $(readlink -f ./authorized-users.xml):/opt/nifi/conf/authorized-users.xml` Maps an authorized-users.xml into the container over the default one provided
+	`-v $(readlink -f ./authorized-users.xml):/nifi/conf/authorized-users.xml` Maps an authorized-users.xml into the container over the default one provided
 
 3. Wait for the image to initalize
-
-		2015-03-21 18:14:37,879 INFO [main] org.apache.nifi.web.server.JettyServer NiFi has started. The UI is available at the following URLs:
-		2015-03-21 18:14:37,880 INFO [main] org.apache.nifi.web.server.JettyServer https://172.17.0.37:443/nifi
-		2015-03-21 18:14:37,880 INFO [main] org.apache.nifi.web.server.JettyServer https://127.0.0.1:443/nifi
-		2015-03-21 18:14:37,880 INFO [main] org.apache.nifi.NiFi Controller initialization took 4572051363 nanoseconds.
 		
 4. Access through your Docker host system
  	
@@ -62,7 +56,7 @@ From your checkout directory:
 
 ### Volumes
 - The following directories are exposed as volumes which may optionally be mounted to a specified location
-	- `/opt/certs`
+	- `/certs`
 	- `${NIFI_HOME}/flowfile_repository`
 	- `${NIFI_HOME}/content_repository`
 	- `${NIFI_HOME}/database_repository`
